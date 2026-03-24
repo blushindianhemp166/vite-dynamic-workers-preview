@@ -9,7 +9,7 @@ Every successful save:
 - uploads the snapshot to a preview host Worker
 - points a stable public URL at the latest Dynamic Worker version
 
-The result is a tweetable demo: a local Vite project that keeps shipping a real public preview on every change.
+The result is a local Vite project that keeps shipping a real public preview on every change.
 
 ## What is in here
 
@@ -97,16 +97,6 @@ The stable public preview lives at:
 ```text
 https://<your-worker>.workers.dev/preview/react-edge-live/
 ```
-
-## Good demo flow for a tweet
-
-1. Start `npm run dev:demo`.
-2. Show the public preview URL loading the React app.
-3. Edit `apps/demo/src/edge.ts` and save.
-4. Refresh or wait for the preview to auto-refresh.
-5. Hit `/api/message` from the UI and show the new version ID.
-
-That makes the point quickly: Vite is acting like a live deploy switch for Dynamic Workers.
 
 ## Useful commands
 
