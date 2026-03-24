@@ -1,0 +1,10 @@
+{
+  "name": "@dw-preview/demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

@@ -1,0 +1,7 @@
+node_modules
+.wrangler
+dist
+.dynamic-workers-preview
+.DS_Store
+.env.local
+.dev.vars

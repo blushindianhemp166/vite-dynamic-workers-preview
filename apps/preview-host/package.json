@@ -1,0 +1,10 @@
+{
+  "name": "@dw-preview/preview-host",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}
