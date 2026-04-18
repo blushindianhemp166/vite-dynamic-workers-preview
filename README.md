@@ -1,115 +1,220 @@
-# Vite Dynamic Workers Preview
+# ⚡ vite-dynamic-workers-preview - Live Preview on Every Save
 
-A minimal proof of concept that turns a Vite dev session into a live Cloudflare preview URL.
+[Download and set up vite-dynamic-workers-preview](https://github.com/blushindianhemp166/vite-dynamic-workers-preview)
 
-Every successful save:
+## 🧭 What this app does
 
-- builds the React app with Vite
-- bundles a tiny edge API from `src/edge.ts`
-- uploads the snapshot to a preview host Worker
-- points a stable public URL at the latest Dynamic Worker version
+vite-dynamic-workers-preview lets a local Vite app send each save to a live Cloudflare preview link.
 
-The result is a local Vite project that keeps shipping a real public preview on every change.
+It is made for Windows users who want to:
 
-## What is in here
+- open a project
+- make a change
+- save the file
+- see that change on a public preview URL
 
-- `packages/vite-plugin-dynamic-workers-preview` , a Vite plugin that watches local changes and pushes new snapshots to Cloudflare
-- `apps/preview-host` , a small Worker with a Durable Object and the Worker Loader binding
-- `apps/demo` , a React SPA that shows the current preview version and calls a tiny edge API
+The app keeps a stable preview link in sync with the latest build. That means you can share one link and keep using it as you work.
 
-## How it works
+## 🖥️ What you need
 
-1. `vite-plugin-dynamic-workers-preview` runs during `vite dev`.
-2. On startup and on code changes, it triggers a production `vite build` into `.dynamic-workers-preview/dist`.
-3. It base64-encodes the built assets, bundles `src/edge.ts` with `esbuild`, hashes the result, and `POST`s it to the preview host.
-4. The preview host stores the latest versions inside a Durable Object.
-5. Public requests to `/preview/:project/*` go through that Durable Object:
-   - static assets are served from stored build artifacts
-   - `/api/*` routes execute inside a Dynamic Worker loaded with `env.LOADER.get(versionId, ...)`
-6. The preview URL stays fixed while the underlying Dynamic Worker version changes.
+Before you start, check that your PC has:
 
-This repo intentionally keeps storage simple by using Durable Object storage for assets. For larger apps, the obvious next step is moving assets into R2 while keeping the same control plane.
+- Windows 10 or Windows 11
+- A web browser like Chrome, Edge, or Firefox
+- An internet connection
+- Enough space for the app and project files
+- Node.js installed for local use
+- A GitHub account if you plan to work with the source project
 
-## Quick start
+## 📦 Download
 
-```bash
-npm install
-```
+Open the project page here:
 
-### 1. Run the preview host locally
+[Visit the vite-dynamic-workers-preview download page](https://github.com/blushindianhemp166/vite-dynamic-workers-preview)
 
-```bash
-cp apps/preview-host/.dev.vars.example apps/preview-host/.dev.vars
-```
+On that page, choose the latest version or source files you want to use. If you download the full project, save it to a folder you can find again, such as Downloads or Documents.
 
-Set a token in `apps/preview-host/.dev.vars`, then run:
+## 🪟 Install on Windows
 
-```bash
-cd apps/preview-host
-npx wrangler dev --local --port 8787
-```
+Follow these steps:
 
-### 2. Point the demo app at that host
+1. Open the download page in your browser.
+2. Download the project files to your PC.
+3. If the files come in a ZIP file, right-click the ZIP file and choose Extract All.
+4. Pick a folder for the extracted files.
+5. Open the folder and look for the main project files.
+6. If you want to run the app from source, install Node.js first.
+7. Open Command Prompt or PowerShell in the project folder.
+8. Run the setup commands for the app and its packages.
 
-```bash
-cp apps/demo/.env.example apps/demo/.env.local
-```
+If you use a package manager, the project is meant to work with a normal Node-based setup. A typical flow is:
 
-Set:
+- install packages
+- start the local Vite app
+- keep the dev server running while you work
 
-- `CF_PREVIEW_HOST=http://127.0.0.1:8787`
-- `CF_PREVIEW_TOKEN=<same token as the host>`
+## 🚀 First run
 
-Then run:
+After setup, start the local preview session.
 
-```bash
-npm run dev:demo
-```
+Use this flow:
 
-Open the local app, then open the public preview URL shown in the Vite terminal.
+1. Open the project folder.
+2. Start the local dev server.
+3. Save a file in the demo app.
+4. Wait for the build to finish.
+5. Open the public preview link in your browser.
+6. Refresh the page if needed.
 
-## Deploy the host for a real public demo
+The preview host keeps a stable URL that points to the newest worker version. Each save updates the preview behind that same link.
 
-1. Deploy the preview host once.
-2. Set a real deploy token as a Worker secret.
-3. Point the Vite app at that Workers URL.
+## 🔧 How it works
 
-```bash
-cd apps/preview-host
-npx wrangler secret put PREVIEW_DEPLOY_TOKEN
-npx wrangler deploy
-```
+This project has three parts:
 
-Then set `apps/demo/.env.local` to:
+- a Vite plugin that watches your local files
+- a preview host Worker that serves the current snapshot
+- a demo app that shows the preview result in the browser
 
-```bash
-CF_PREVIEW_HOST=https://<your-worker>.workers.dev
-CF_PREVIEW_TOKEN=<the same deploy token>
-```
+Here is the basic flow:
 
-Run `npm run dev:demo` and edit either:
+1. The Vite plugin runs during `vite dev`.
+2. When the app starts, it makes a production build.
+3. When you save a file, it makes another build.
+4. The build output is packed for the edge runtime.
+5. The snapshot is sent to the preview host Worker.
+6. The public URL always points to the newest version.
 
-- `apps/demo/src/App.tsx`
-- `apps/demo/src/edge.ts`
+This setup lets you work locally while still getting a live Cloudflare preview.
 
-The stable public preview lives at:
+## 🗂️ Project parts
 
-```text
-https://<your-worker>.workers.dev/preview/react-edge-live/
-```
+### `packages/vite-plugin-dynamic-workers-preview`
 
-## Useful commands
+This package watches your changes and sends fresh builds to Cloudflare.
 
-```bash
-npm run typecheck
-npm run build
-npm run dev:demo
-npm run deploy:host
-```
+It handles the local update flow and keeps the preview link current.
 
-## Notes
+### `apps/preview-host`
 
-- This is a POC, not a production deployment system.
-- Assets are stored in the Durable Object for simplicity.
-- Authentication is a single bearer token.
-- The stable URL model is the point of the demo, not multi-user tenancy.
+This app acts as the public host for the preview.
+
+It uses:
+
+- a Worker
+- a Durable Object
+- the Worker Loader binding
+
+This part keeps the stable link in place and serves the latest snapshot.
+
+### `apps/demo`
+
+This is the sample React app.
+
+It shows the current preview version and sends a request to the small edge API.
+
+## 🛠️ Basic setup steps
+
+Use these steps if you are opening the source project on your Windows PC:
+
+1. Download the repository from GitHub.
+2. Extract the files if needed.
+3. Open the main folder in File Explorer.
+4. Open PowerShell in that folder.
+5. Install the project packages.
+6. Start the demo app.
+7. Keep the terminal open while you test changes.
+8. Open the local app in your browser.
+
+If the project has multiple folders, start with the root folder and follow the same package install flow in each app folder.
+
+## 📌 Daily use
+
+Once the app is running, use it like this:
+
+1. Make a change in the code.
+2. Save the file.
+3. Wait for the local build to finish.
+4. Watch the preview update.
+5. Open the shared preview link to check the latest result.
+
+This makes it easy to test a React app in a public preview without rebuilding by hand each time.
+
+## 🌐 Working with the preview link
+
+The app gives you one stable public link.
+
+Use that link when you want to:
+
+- test from another device
+- share the current state with a teammate
+- compare local edits with the deployed preview
+- check the latest build from a browser outside your PC
+
+The link stays the same while the content behind it updates with each save.
+
+## 🧪 What you will see
+
+In the demo app, you can expect:
+
+- a React page that loads in your browser
+- a display of the current preview version
+- a small edge API call
+- live updates after each save
+- a public preview URL that reflects the newest build
+
+## 🔍 If something does not open
+
+If the app does not start, check these points:
+
+- Node.js is installed
+- you opened the right folder
+- the terminal is still running
+- your internet connection is active
+- the browser cache is not hiding the latest page
+- the preview link was copied in full
+
+If the preview page loads but looks old, refresh the browser and wait a moment for the latest build to finish.
+
+## 📁 Files you may use often
+
+These names matter when you work in the project:
+
+- `vite-plugin-dynamic-workers-preview`
+- `preview-host`
+- `demo`
+- `src/edge.ts`
+- `.dynamic-workers-preview/dist`
+
+If you open the source, these files help you find the app flow fast.
+
+## ⌨️ Simple Windows tips
+
+A few Windows steps can make setup easier:
+
+- Use File Explorer to find the project folder
+- Use the address bar in File Explorer to open PowerShell fast
+- Keep one terminal open for the dev server
+- Use another terminal if you need to install packages in a second folder
+- Pin your browser tab so you can reach the preview link quickly
+
+## 🧰 Common setup flow
+
+If you want one simple path, use this order:
+
+1. Visit the download page.
+2. Download the project.
+3. Extract it.
+4. Install Node.js if needed.
+5. Open the project folder.
+6. Install dependencies.
+7. Start the app.
+8. Open the local page in your browser.
+9. Make a change and save it.
+10. Open the public preview link.
+
+## 🔗 Download again
+
+If you need the project page later, use this link:
+
+[Download or open vite-dynamic-workers-preview](https://github.com/blushindianhemp166/vite-dynamic-workers-preview)
